@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WOW PDFs - Frontend Tools Hub</title>
+    <!-- Minimal QR Code library for QR Code Generator tool -->
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+    <style>
+        /* CSS VARIABLES (ABHINAV PROMPT THEME) */
+        :root {
+            --bg-main: #0d0f14;
+            --bg-navbar: #1c222d;
+            --bg-card: #12151a;
+            --bg-button: #1c222d;
+            --accent-primary: #42f8f5;
+            --accent-shade: #3ff7f3;
+            --text-primary: #ffffff;
+            --text-secondary: #c5d1de;
+            --glow-shadow: rgba(66, 248, 245, 0.6);
+            --glow-shadow-hover: rgba(66, 248, 245, 0.9);
+            --border-color: #42f8f5;
+            --error-color: #f84242;
+        }
+
+        /* GENERAL STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        /* SCROLLBAR STYLES */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-main);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-shade);
+        }
+
+        /* HEADER & NAVBAR */
+        .header {
+            background-color: var(--bg-navbar);
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid var(--accent-primary);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-primary);
+            text-shadow: 0 0 5px var(--glow-shadow);
+            cursor: pointer;
+        }
+
+        .logo-accent {
+            color: var(--accent-primary);
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: 500;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-primary);
+            text-shadow: 0 0 10px var(--glow-shadow);
+        }
+        
+        .nav-toggle {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        /* MAIN CONTENT & TOOL GRID */
+        .main-container {
+            padding: 2rem 5%;
+        }
+        
+        #tools {
+            padding-top: 1rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            text-shadow: 0 0 10px var(--glow-shadow);
+        }
+
+        .tool-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        /* TOOL CARD STYLING */
+        .tool-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--bg-navbar);
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-color);
+            box-shadow: 0 0 15px var(--glow-shadow);
+        }
+
+        .tool-card h2 {
+            color: var(--accent-primary);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-card p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            flex-grow: 1;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* GENERAL BUTTON STYLES */
+        .glow-button {
+            background-color: var(--bg-button);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 5px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 5px var(--glow-shadow);
+            display: block;
+            width: 100%;
+        }
+
+        .glow-button:hover, .glow-button:focus {
+            background-color: var(--accent-primary);
+            color: var(--bg-main);
+            box-shadow: 0 0 20px var(--glow-shadow-hover);
+        }
+        .glow-button:disabled {
+            cursor: not-allowed;
+            background-color: #333;
+            border-color: #555;
+            box-shadow: none;
+            color: #888;
+        }
+
+        /* MODAL STYLES */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--bg-main);
+            margin: 5% auto;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 0 25px var(--glow-shadow);
+            position: relative;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-close {
+            color: var(--text-secondary);
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--accent-primary);
+            transform: scale(1.1);
+        }
+
+        .modal-header h2 {
+            color: var(--accent-primary);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-body {
+            max-height: 70vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        /* TOOL-SPECIFIC UI STYLES WITHIN MODAL */
+        .tool-ui-container {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .tool-ui-container label, .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-weight: bold;
+        }
+
+        .tool-ui-container input[type="text"],
+        .tool-ui-container input[type="number"],
+        .tool-ui-container input[type="date"],
+        .tool-ui-container textarea,
+        .tool-ui-container select {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--bg-button);
+            border: 1px solid var(--bg-navbar);
+            border-radius: 5px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .tool-ui-container input[type="text"]:focus,
+        .tool-ui-container input[type="number"]:focus,
+        .tool-ui-container input[type="date"]:focus,
+        .tool-ui-container textarea:focus,
+        .tool-ui-container select:focus {
+            outline: none;
+            border-color: var(--border-color);
+            box-shadow: 0 0 8px var(--glow-shadow);
+        }
+
+        .tool-ui-container textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .tool-ui-container input[type="file"] {
+            display: none;
+        }
+        
+        .file-upload-label {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--bg-button);
+            border: 2px dashed var(--border-color);
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        
+        .file-upload-label:hover {
+            background-color: var(--bg-navbar);
+        }
+        
+        .result-box, #qr-code-container, #color-preview {
+            background-color: var(--bg-card);
+            border: 1px solid var(--bg-navbar);
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            word-wrap: break-word;
+            min-height: 50px;
+        }
+
+        .alert-message {
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 5px;
+            font-weight: bold;
+            display: none;
+        }
+        .alert-message.success {
+            background-color: rgba(66, 248, 245, 0.2);
+            border: 1px solid var(--accent-primary);
+            color: var(--accent-primary);
+        }
+        .alert-message.error {
+            background-color: rgba(248, 66, 66, 0.2);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+        
+        .flex-group {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .flex-group > * {
+            flex: 1;
+        }
+        
+        #color-picker {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 60px;
+            height: 60px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        #color-picker::-webkit-color-swatch {
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+        }
+        #color-picker::-moz-color-swatch {
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+        }
+
+        #timer-display, #stopwatch-display {
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            color: var(--accent-primary);
+            text-shadow: 0 0 10px var(--glow-shadow);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 1024px) {
+            .tool-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem 2rem;
+            }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                text-align: center;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-links a {
+                padding: 0.5rem 0;
+                border-top: 1px solid var(--bg-button);
+            }
+            .nav-toggle {
+                display: block;
+                position: absolute;
+                top: 1.25rem;
+                right: 1.25rem;
+            }
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                padding: 1.5rem;
+            }
+            .flex-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo">WOW<span class="logo-accent">PDFs</span></div>
+        <nav class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#tools">Tools</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </nav>
+        <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-container" id="home">
+        <section id="tools">
+            <h1 class="section-title">Frontend Tools Hub</h1>
+            <div class="tool-grid">
+                <!-- Tool cards will be dynamically generated by JS -->
+            </div>
+        </section>
+        
+        <section id="about" style="padding: 4rem 0;">
+             <h2 class="section-title">About WOW PDFs</h2>
+             <p style="text-align: center; max-width: 800px; margin: 0 auto; color: var(--text-secondary);">
+                WOW PDFs is a modern, premium-quality website providing a suite of 20+ frontend-only tools. Designed with a glowing, futuristic UI, our hub offers everything from image and audio manipulation to calculators and code formatters. All tools run completely in your browser, ensuring your data remains private and secure. No uploads, no servers, just powerful utilities at your fingertips.
+             </p>
+        </section>
+
+        <section id="contact" style="padding-bottom: 4rem;">
+            <h2 class="section-title">Contact</h2>
+            <p style="text-align: center; color: var(--text-secondary);">For inquiries, please reach out via our (placeholder) social media channels.</p>
+        </section>
+    </main>
+
+    <!-- MODAL -->
+    <div id="toolModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">×</span>
+            <div class="modal-header">
+                <h2 id="modal-title">Tool Title</h2>
+            </div>
+            <div class="modal-body">
+                <div id="modal-tool-ui" class="tool-ui-container">
+                    <!-- Tool-specific UI will be injected here -->
+                </div>
+                <div id="modal-alert" class="alert-message"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const tools = [
+            { id: 'imageConverter', title: 'Image Converter', description: 'Convert images to JPG, PNG, or WebP. Works offline.' },
+            { id: 'imageCompressor', title: 'Image Compressor', description: 'Reduce image file size with adjustable quality.' },
+            { id: 'imageCropper', title: 'Image Cropper', description: 'Crop and resize images visually. (Simplified)' },
+            { id: 'videoConverter', title: 'Video Converter', description: 'Client-side video conversion is complex. This is a conceptual UI.' },
+            { id: 'audioConverter', title: 'Audio Converter', description: 'Conceptual UI for client-side audio format conversion.' },
+            { id: 'audioTrimmer', title: 'Audio Trimmer', description: 'Trim audio files directly in your browser. (Conceptual)' },
+            { id: 'ageCalculator', title: 'Age Calculator', description: 'Calculate age from your date of birth.' },
+            { id: 'emiCalculator', title: 'EMI Calculator', description: 'Calculate Equated Monthly Installment for loans. (Conceptual)' },
+            { id: 'sipCalculator', title: 'SIP Calculator', description: 'Calculate returns on your Systematic Investment Plan. (Conceptual)' },
+            { id: 'qrCodeGenerator', title: 'QR Code Generator', description: 'Create QR codes for URLs, text, and more.' },
+            { id: 'passwordGenerator', title: 'Password Generator', description: 'Generate strong, secure, and customizable passwords.' },
+            { id: 'wordCounter', title: 'Word Counter', description: 'Count words, characters, and sentences in a text.' },
+            { id: 'base64', title: 'Base64 Encoder/Decoder', description: 'Encode text to Base64 or decode from it.' },
+            { id: 'colorPicker', title: 'Color Picker Tool', description: 'Pick a color and get its HEX, RGB, and HSL values.' },
+            { id: 'textToSpeech', title: 'Text to Speech', description: 'Convert text into spoken audio with various voices.' },
+            { id: 'speechToText', title: 'Speech to Text', description: 'Transcribe your spoken words into text.' },
+            { id: 'jsonFormatter', title: 'JSON Formatter', description: 'Format, validate, and beautify JSON data.' },
+            { id: 'unitConverter', title: 'Unit Converter', description: 'Convert between various units of measurement. (Conceptual)' },
+            { id: 'bmiCalculator', title: 'BMI Calculator', description: 'Calculate your Body Mass Index.' },
+            { id: 'timerStopwatch', title: 'Timer / Stopwatch', description: 'A handy timer and stopwatch utility.' },
+        ];
+
+        const toolGrid = document.querySelector('.tool-grid');
+        const modal = document.getElementById('toolModal');
+        const modalClose = document.querySelector('.modal-close');
+        const modalTitle = document.getElementById('modal-title');
+        const modalToolUi = document.getElementById('modal-tool-ui');
+        const modalAlert = document.getElementById('modal-alert');
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        // --- Initialize Tool Cards ---
+        function populateTools() {
+            toolGrid.innerHTML = '';
+            tools.forEach(tool => {
+                const card = document.createElement('div');
+                card.className = 'tool-card';
+                card.innerHTML = `
+                    <h2>${tool.title}</h2>
+                    <p>${tool.description}</p>
+                    <button class="glow-button" data-tool-id="${tool.id}">Open Tool</button>
+                `;
+                toolGrid.appendChild(card);
+            });
+        }
+
+        // --- Modal Handling ---
+        function openModal(toolId) {
+            const tool = tools.find(t => t.id === toolId);
+            if (!tool) return;
+            
+            modalTitle.textContent = tool.title;
+            modalToolUi.innerHTML = ''; // Clear previous content
+            hideAlert();
+            
+            // Render the specific UI for the tool
+            renderToolUI(toolId);
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            // Stop any ongoing processes like speech recognition or synthesis
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+            if (window.recognition && window.recognition.isStarted) window.recognition.stop();
+        }
+
+        function showAlert(message, type = 'success') {
+            modalAlert.textContent = message;
+            modalAlert.className = `alert-message ${type}`;
+            modalAlert.style.display = 'block';
+        }
+
+        function hideAlert() {
+            modalAlert.style.display = 'none';
+        }
+
+        // --- Event Listeners ---
+        toolGrid.addEventListener('click', (e) => {
+            if (e.target.classList.contains('glow-button')) {
+                const toolId = e.target.getAttribute('data-tool-id');
+                openModal(toolId);
+            }
+        });
+        
+        modalClose.addEventListener('click', closeModal);
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+        
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // --- Tool UI Rendering and Logic ---
+        function renderToolUI(toolId) {
+            // This is the main router for showing tool interfaces
+            // Each case builds the HTML for a specific tool
+            switch (toolId) {
+                case 'imageConverter':
+                    modalToolUi.innerHTML = `
+                        <label for="file-upload" class="file-upload-label">Select Image File</label>
+                        <input type="file" id="file-upload" accept="image/*">
+                        <div class="form-group">
+                            <label for="format-select">Convert to:</label>
+                            <select id="format-select">
+                                <option value="image/png">PNG</option>
+                                <option value="image/jpeg">JPEG</option>
+                                <option value="image/webp">WebP</option>
+                            </select>
+                        </div>
+                        <p id="file-name" style="color: var(--text-secondary); text-align: center;"></p>
+                        <button id="convert-btn" class="glow-button" disabled>Convert and Download</button>
+                    `;
+                    setupImageConverter();
+                    break;
+                
+                case 'imageCompressor':
+                    modalToolUi.innerHTML = `
+                        <label for="file-upload" class="file-upload-label">Select Image File</label>
+                        <input type="file" id="file-upload" accept="image/jpeg,image/png">
+                        <div class="form-group">
+                            <label for="quality-slider">Quality (0-1): <span id="quality-value">0.7</span></label>
+                            <input type="range" id="quality-slider" min="0" max="1" step="0.05" value="0.7" style="width: 100%;">
+                        </div>
+                        <p id="file-name" style="color: var(--text-secondary); text-align: center;"></p>
+                        <button id="compress-btn" class="glow-button" disabled>Compress and Download</button>
+                    `;
+                    setupImageCompressor();
+                    break;
+
+                case 'ageCalculator':
+                    modalToolUi.innerHTML = `
+                        <div class="form-group">
+                            <label for="dob-input">Enter your Date of Birth:</label>
+                            <input type="date" id="dob-input">
+                        </div>
+                        <button id="calculate-age-btn" class="glow-button">Calculate Age</button>
+                        <div id="age-result" class="result-box"></div>
+                    `;
+                    document.getElementById('calculate-age-btn').onclick = () => {
+                        const dobInput = document.getElementById('dob-input').value;
+                        const resultBox = document.getElementById('age-result');
+                        if (!dobInput) {
+                            resultBox.textContent = 'Please select a date.';
+                            return;
+                        }
+                        const dob = new Date(dobInput);
+                        const today = new Date();
+                        let age = today.getFullYear() - dob.getFullYear();
+                        const m = today.getMonth() - dob.getMonth();
+                        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                            age--;
+                        }
+                        resultBox.innerHTML = `You are <strong>${age}</strong> years old.`;
+                    };
+                    break;
+                
+                case 'qrCodeGenerator':
+                    modalToolUi.innerHTML = `
+                        <div class="form-group">
+                            <label for="qr-text-input">Text or URL:</label>
+                            <textarea id="qr-text-input" placeholder="Enter text or URL to encode"></textarea>
+                        </div>
+                        <button id="generate-qr-btn" class="glow-button">Generate QR Code</button>
+                        <div id="qr-code-container" style="display: flex; justify-content: center; margin-top: 1rem;"></div>
+                    `;
+                    document.getElementById('generate-qr-btn').onclick = () => {
+                        const text = document.getElementById('qr-text-input').value.trim();
+                        const container = document.getElementById('qr-code-container');
+                        container.innerHTML = '';
+                        if (text) {
+                            new QRCode(container, {
+                                text: text,
+                                width: 200,
+                                height: 200,
+                                colorDark: getComputedStyle(document.documentElement).getPropertyValue('--accent-primary').trim(),
+                                colorLight: getComputedStyle(document.documentElement).getPropertyValue('--bg-main').trim(),
+                                correctLevel: QRCode.CorrectLevel.H
+                            });
+                        } else {
+                            showAlert('Please enter text or a URL.', 'error');
+                        }
+                    };
+                    break;
+
+                case 'passwordGenerator':
+                    modalToolUi.innerHTML = `
+                        <div class="form-group">
+                            <label for="length-input">Password Length: <span id="length-value">16</span></label>
+                            <input type="range" id="length-input" min="8" max="64" value="16" style="width: 100%;">
+                        </div>
+                        <div class="flex-group" style="flex-wrap: wrap;">
+                            <label><input type="checkbox" id="uppercase-check" checked> Uppercase</label>
+                            <label><input type="checkbox" id="lowercase-check" checked> Lowercase</label>
+                            <label><input type="checkbox" id="numbers-check" checked> Numbers</label>
+                            <label><input type="checkbox" id="symbols-check" checked> Symbols</label>
+                        </div>
+                        <button id="generate-pass-btn" class="glow-button">Generate Password</button>
+                        <div id="password-result" class="result-box" style="cursor: pointer; text-align: center;">Click to copy</div>
+                    `;
+                    setupPasswordGenerator();
+                    break;
+                    
+                case 'wordCounter':
+                    modalToolUi.innerHTML = `
+                        <div class="form-group">
+                            <label for="text-area">Paste your text here:</label>
+                            <textarea id="text-area"></textarea>
+                        </div>
+                        <div id="word-count-result" class="result-box">
+                            Words: 0 | Characters: 0 | Sentences: 0
+                        </div>
+                    `;
+                    document.getElementById('text-area').oninput = () => {
+                        const text = document.getElementById('text-area').value;
+                        const words = text.trim().split(/\s+/).filter(Boolean).length;
+                        const chars = text.length;
+                        const sentences = (text.match(/[.!?]+/g) || []).length;
+                        document.getElementById('word-count-result').innerHTML = `
+                            Words: <strong>${words}</strong> | Characters: <strong>${chars}</strong> | Sentences: <strong>${sentences}</strong>
+                        `;
+                    };
+                    break;
+                    
+                case 'base64':
+                    modalToolUi.innerHTML = `
+                        <div class="form-group">
+                            <label for="base64-input">Input:</label>
+                            <textarea id="base64-input"></textarea>
+                        </div>
+                        <div class="button-group">
+                            <button id="encode-btn" class="glow-button">Encode to Base64</button>
+                            <button id="decode-btn" class="glow-button">Decode from Base64</button>
+                        </div>
+                        <div id="base64-result" class="result-box"></div>
+                    `;
+                    document.getElementById('encode-btn').onclick = () => {
+                        const input = document.getElementById('base64-input').value;
+                        try {
+                            document.getElementById('base64-result').textContent = btoa(unescape(encodeURIComponent(input)));
+                            showAlert('Encoded successfully!', 'success');
+                        } catch (e) {
+                            showAlert('Error encoding text.', 'error');
+                        }
+                    };
+                    document.getElementById('decode-btn').onclick = () => {
+                        const input = document.getElementById('base64-input').value;
+                        try {
+                            document.getElementById('base64-result').textContent = decodeURIComponent(escape(atob(input)));
+                             showAlert('Decoded successfully!', 'success');
+                        } catch (e) {
+                            showAlert('Invalid Base64 string.', 'error');
+                        }
+                    };
+                    break;
+
+                case 'colorPicker':
+                    modalToolUi.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 2rem;">
+                           <input type="color" id="color-picker" value="#42f8f5">
+                           <div id="color-values" class="result-box" style="flex-grow: 1;"></div>
+                        </div>
+                    `;
+                    setupColorPicker();
+                    break;
+
+                case 'textToSpeech':
+                    modalToolUi.innerHTML = `
+                        <div class="form-group">
+                            <label for="tts-input">Text to speak:</label>
+                            <textarea id="tts-input" placeholder="Enter text here..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="voice-select">Voice:</label>
+                            <select id="voice-select"></select>
+                        </div>
+                        <button id="speak-btn" class="glow-button">Speak</button>
+                    `;
+                    setupTextToSpeech();
+                    break;
+
+                case 'speechToText':
+                    modalToolUi.innerHTML = `
+                        <button id="stt-btn" class="glow-button">Start Listening</button>
+                        <div id="stt-result" class="result-box">Transcript will appear here...</div>
+                    `;
+                    setupSpeechToText();
+                    break;
+                    
+                case 'jsonFormatter':
+                    modalToolUi.innerHTML = `
+                        <div class="form-group">
+                            <label for="json-input">Paste JSON here:</label>
+                            <textarea id="json-input"></textarea>
+                        </div>
+                        <button id="format-json-btn" class="glow-button">Format / Validate</button>
+                    `;
+                    document.getElementById('format-json-btn').onclick = () => {
+                        const textarea = document.getElementById('json-input');
+                        try {
+                            const parsed = JSON.parse(textarea.value);
+                            textarea.value = JSON.stringify(parsed, null, 4);
+                            showAlert('JSON is valid and formatted!', 'success');
+                        } catch (e) {
+                            showAlert(`Invalid JSON: ${e.message}`, 'error');
+                        }
+                    };
+                    break;
+                    
+                case 'bmiCalculator':
+                    modalToolUi.innerHTML = `
+                        <div class="flex-group">
+                            <div class="form-group">
+                                <label for="height-input">Height (cm):</label>
+                                <input type="number" id="height-input" placeholder="e.g., 180">
+                            </div>
+                            <div class="form-group">
+                                <label for="weight-input">Weight (kg):</label>
+                                <input type="number" id="weight-input" placeholder="e.g., 75">
+                            </div>
+                        </div>
+                        <button id="calculate-bmi-btn" class="glow-button">Calculate BMI</button>
+                        <div id="bmi-result" class="result-box"></div>
+                    `;
+                    document.getElementById('calculate-bmi-btn').onclick = () => {
+                        const height = parseFloat(document.getElementById('height-input').value);
+                        const weight = parseFloat(document.getElementById('weight-input').value);
+                        const resultBox = document.getElementById('bmi-result');
+                        if (height > 0 && weight > 0) {
+                            const bmi = (weight / ((height / 100) ** 2)).toFixed(2);
+                            let category = '';
+                            if (bmi < 18.5) category = 'Underweight';
+                            else if (bmi < 24.9) category = 'Normal weight';
+                            else if (bmi < 29.9) category = 'Overweight';
+                            else category = 'Obesity';
+                            resultBox.innerHTML = `Your BMI is <strong>${bmi}</strong>. This is considered <strong>${category}</strong>.`;
+                        } else {
+                            resultBox.textContent = 'Please enter valid height and weight.';
+                        }
+                    };
+                    break;
+                
+                case 'timerStopwatch':
+                    modalToolUi.innerHTML = `
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 2rem; @media (min-width: 500px) { grid-template-columns: 1fr 1fr; }">
+                            <div style="text-align: center; border-bottom: 1px solid var(--bg-navbar); padding-bottom: 1rem;">
+                                <h3>Timer</h3>
+                                <div id="timer-display">00:00</div>
+                                <div class="flex-group">
+                                    <input type="number" id="timer-minutes" placeholder="Min" min="0">
+                                    <input type="number" id="timer-seconds" placeholder="Sec" min="0" max="59">
+                                </div>
+                                <div class="button-group">
+                                    <button id="timer-start" class="glow-button">Start</button>
+                                    <button id="timer-reset" class="glow-button">Reset</button>
+                                </div>
+                            </div>
+                            <div style="text-align: center; border-bottom: 1px solid var(--bg-navbar); padding-bottom: 1rem;">
+                                <h3>Stopwatch</h3>
+                                <div id="stopwatch-display">00:00:00</div>
+                                <div class="button-group">
+                                    <button id="stopwatch-start" class="glow-button">Start</button>
+                                    <button id="stopwatch-reset" class="glow-button">Reset</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    setupTimerStopwatch();
+                    break;
+                
+                // --- Placeholder/Simplified Tools ---
+                case 'imageCropper':
+                case 'videoConverter':
+                case 'audioConverter':
+                case 'audioTrimmer':
+                case 'emiCalculator':
+                case 'sipCalculator':
+                case 'unitConverter':
+                     showAlert('This is a conceptual tool. A full implementation requires complex libraries beyond simple JavaScript.', 'success');
+                     modalToolUi.innerHTML = `<p style="color:var(--text-secondary); text-align: center;">This tool demonstrates a potential UI. The full functionality for this type of operation often requires specialized, large libraries (like ffmpeg.wasm or advanced canvas manipulation) and is beyond the scope of a simple, single-file script.</p>`;
+                    break;
+
+                default:
+                    modalToolUi.innerHTML = `<p style="color: var(--text-secondary);">This tool is under construction.</p>`;
+            }
+        }
+        
+        // --- Setup Functions for Complex Tools ---
+        function setupImageConverter() {
+            const fileInput = document.getElementById('file-upload');
+            const fileNameDisplay = document.getElementById('file-name');
+            const convertBtn = document.getElementById('convert-btn');
+            const formatSelect = document.getElementById('format-select');
+            let file;
+
+            fileInput.onchange = (e) => {
+                file = e.target.files[0];
+                if (file) {
+                    fileNameDisplay.textContent = file.name;
+                    convertBtn.disabled = false;
+                }
+            };
+            
+            convertBtn.onclick = () => {
+                if (!file) return;
+                showAlert('Processing...', 'success');
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+                        const format = formatSelect.value;
+                        const dataUrl = canvas.toDataURL(format);
+                        const link = document.createElement('a');
+                        const extension = format.split('/')[1];
+                        link.download = `${file.name.split('.')[0]}.${extension}`;
+                        link.href = dataUrl;
+                        link.click();
+                        hideAlert();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            };
+        }
+        
+        function setupImageCompressor() {
+            const fileInput = document.getElementById('file-upload');
+            const fileNameDisplay = document.getElementById('file-name');
+            const compressBtn = document.getElementById('compress-btn');
+            const qualitySlider = document.getElementById('quality-slider');
+            const qualityValue = document.getElementById('quality-value');
+            let file;
+
+            qualitySlider.oninput = () => qualityValue.textContent = qualitySlider.value;
+            fileInput.onchange = (e) => {
+                file = e.target.files[0];
+                if (file) {
+                    fileNameDisplay.textContent = file.name;
+                    compressBtn.disabled = false;
+                }
+            };
+            
+            compressBtn.onclick = () => {
+                if (!file || (file.type !== 'image/jpeg' && file.type !== 'image/png')) {
+                    showAlert('Please select a JPG or PNG file for compression.', 'error');
+                    return;
+                }
+                showAlert('Compressing...', 'success');
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+                        const quality = parseFloat(qualitySlider.value);
+                        // Only JPEG supports quality setting in toDataURL
+                        const format = 'image/jpeg';
+                        const dataUrl = canvas.toDataURL(format, quality);
+                        const link = document.createElement('a');
+                        link.download = `compressed-${file.name.split('.')[0]}.jpg`;
+                        link.href = dataUrl;
+                        link.click();
+                        hideAlert();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            };
+        }
+        
+        function setupPasswordGenerator() {
+            const lengthSlider = document.getElementById('length-input');
+            const lengthValue = document.getElementById('length-value');
+            const resultBox = document.getElementById('password-result');
+            
+            lengthSlider.oninput = () => lengthValue.textContent = lengthSlider.value;
+            
+            document.getElementById('generate-pass-btn').onclick = () => {
+                const length = +lengthSlider.value;
+                const hasUpper = document.getElementById('uppercase-check').checked;
+                const hasLower = document.getElementById('lowercase-check').checked;
+                const hasNumber = document.getElementById('numbers-check').checked;
+                const hasSymbol = document.getElementById('symbols-check').checked;
+                
+                resultBox.textContent = generatePassword(length, hasUpper, hasLower, hasNumber, hasSymbol);
+                showAlert('Password generated! Click to copy.', 'success');
+            };
+            
+            resultBox.onclick = () => {
+                if(resultBox.textContent && resultBox.textContent !== 'Click to copy') {
+                    navigator.clipboard.writeText(resultBox.textContent)
+                        .then(() => showAlert('Copied to clipboard!', 'success'))
+                        .catch(() => showAlert('Could not copy to clipboard.', 'error'));
+                }
+            };
+        }
+
+        const randomFunc = {
+            lower: () => String.fromCharCode(Math.floor(Math.random() * 26) + 97),
+            upper: () => String.fromCharCode(Math.floor(Math.random() * 26) + 65),
+            number: () => String.fromCharCode(Math.floor(Math.random() * 10) + 48),
+            symbol: () => {
+                const symbols = '!@#$%^&*(){}[]=<>/,.';
+                return symbols[Math.floor(Math.random() * symbols.length)];
+            }
+        };
+
+        function generatePassword(length, upper, lower, number, symbol) {
+            let generatedPassword = '';
+            const typesCount = upper + lower + number + symbol;
+            if (typesCount === 0) return '';
+            
+            const typesArr = [{upper}, {lower}, {number}, {symbol}].filter(item => Object.values(item)[0]);
+
+            for (let i = 0; i < length; i++) {
+                const type = typesArr[Math.floor(Math.random() * typesArr.length)];
+                const funcName = Object.keys(type)[0];
+                generatedPassword += randomFunc[funcName]();
+            }
+            return generatedPassword.slice(0, length);
+        }
+
+        function setupColorPicker() {
+            const colorPicker = document.getElementById('color-picker');
+            const valuesBox = document.getElementById('color-values');
+
+            const updateColor = (color) => {
+                const rgb = hexToRgb(color);
+                const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+                valuesBox.innerHTML = `
+                    <strong>HEX:</strong> ${color}<br>
+                    <strong>RGB:</strong> rgb(${rgb.r}, ${rgb.g}, ${rgb.b})<br>
+                    <strong>HSL:</strong> hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)
+                `;
+            };
+            
+            colorPicker.oninput = (e) => updateColor(e.target.value);
+            updateColor(colorPicker.value); // Initial value
+        }
+        
+        function hexToRgb(hex) {
+            let r = 0, g = 0, b = 0;
+            if (hex.length == 4) {
+                r = "0x" + hex[1] + hex[1];
+                g = "0x" + hex[2] + hex[2];
+                b = "0x" + hex[3] + hex[3];
+            } else if (hex.length == 7) {
+                r = "0x" + hex[1] + hex[2];
+                g = "0x" + hex[3] + hex[4];
+                b = "0x" + hex[5] + hex[6];
+            }
+            return {r: +r, g: +g, b: +b};
+        }
+
+        function rgbToHsl(r, g, b) {
+            r /= 255; g /= 255; b /= 255;
+            let max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+            if (max == min) {
+                h = s = 0;
+            } else {
+                let d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            return {h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100)};
+        }
+
+        function setupTextToSpeech() {
+            const ttsInput = document.getElementById('tts-input');
+            const voiceSelect = document.getElementById('voice-select');
+            const speakBtn = document.getElementById('speak-btn');
+            let voices = [];
+
+            function populateVoiceList() {
+                voices = speechSynthesis.getVoices();
+                voiceSelect.innerHTML = voices
+                    .map(voice => `<option value="${voice.name}">${voice.name} (${voice.lang})</option>`)
+                    .join('');
+            }
+            
+            populateVoiceList();
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = populateVoiceList;
+            }
+
+            speakBtn.onclick = () => {
+                if (speechSynthesis.speaking) {
+                    speechSynthesis.cancel();
+                }
+                const text = ttsInput.value;
+                if(text.trim().length === 0) return;
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                const selectedVoice = voices.find(voice => voice.name === voiceSelect.value);
+                if (selectedVoice) {
+                    utterance.voice = selectedVoice;
+                }
+                speechSynthesis.speak(utterance);
+            };
+        }
+        
+        function setupSpeechToText() {
+            const sttBtn = document.getElementById('stt-btn');
+            const resultBox = document.getElementById('stt-result');
+            
+            window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!window.SpeechRecognition) {
+                showAlert('Speech Recognition API not supported in this browser.', 'error');
+                sttBtn.disabled = true;
+                return;
+            }
+            
+            const recognition = new window.SpeechRecognition();
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+            window.recognition = recognition; // Store globally to stop on modal close
+            recognition.isStarted = false;
+            
+            recognition.addEventListener('result', e => {
+                const transcript = Array.from(e.results)
+                    .map(result => result[0])
+                    .map(result => result.transcript)
+                    .join('');
+                resultBox.textContent = transcript;
+            });
+            
+            recognition.addEventListener('end', () => {
+                sttBtn.textContent = 'Start Listening';
+                recognition.isStarted = false;
+            });
+            
+            sttBtn.onclick = () => {
+                if (recognition.isStarted) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                    sttBtn.textContent = 'Stop Listening';
+                    recognition.isStarted = true;
+                }
+            };
+        }
+        
+        function setupTimerStopwatch() {
+            let timerInterval, stopwatchInterval;
+            let timerSecondsLeft = 0, stopwatchTime = 0;
+            
+            // Timer
+            const timerDisplay = document.getElementById('timer-display');
+            const timerStartBtn = document.getElementById('timer-start');
+            timerStartBtn.onclick = () => {
+                if (timerStartBtn.textContent === 'Start') {
+                    const minutes = parseInt(document.getElementById('timer-minutes').value) || 0;
+                    const seconds = parseInt(document.getElementById('timer-seconds').value) || 0;
+                    timerSecondsLeft = minutes * 60 + seconds;
+                    if (timerSecondsLeft <= 0) return;
+                    
+                    timerStartBtn.textContent = 'Pause';
+                    timerInterval = setInterval(() => {
+                        timerSecondsLeft--;
+                        const min = Math.floor(timerSecondsLeft / 60).toString().padStart(2, '0');
+                        const sec = (timerSecondsLeft % 60).toString().padStart(2, '0');
+                        timerDisplay.textContent = `${min}:${sec}`;
+                        if (timerSecondsLeft <= 0) {
+                            clearInterval(timerInterval);
+                            showAlert('Timer finished!', 'success');
+                            timerStartBtn.textContent = 'Start';
+                        }
+                    }, 1000);
+                } else {
+                    timerStartBtn.textContent = 'Start';
+                    clearInterval(timerInterval);
+                }
+            };
+            document.getElementById('timer-reset').onclick = () => {
+                clearInterval(timerInterval);
+                timerStartBtn.textContent = 'Start';
+                timerDisplay.textContent = '00:00';
+                document.getElementById('timer-minutes').value = '';
+                document.getElementById('timer-seconds').value = '';
+            };
+            
+            // Stopwatch
+            const stopwatchDisplay = document.getElementById('stopwatch-display');
+            const stopwatchStartBtn = document.getElementById('stopwatch-start');
+            stopwatchStartBtn.onclick = () => {
+                if (stopwatchStartBtn.textContent === 'Start') {
+                    stopwatchStartBtn.textContent = 'Stop';
+                    const startTime = Date.now() - stopwatchTime;
+                    stopwatchInterval = setInterval(() => {
+                        stopwatchTime = Date.now() - startTime;
+                        const ms = Math.floor((stopwatchTime % 1000) / 10).toString().padStart(2, '0');
+                        const sec = Math.floor((stopwatchTime / 1000) % 60).toString().padStart(2, '0');
+                        const min = Math.floor((stopwatchTime / (1000 * 60)) % 60).toString().padStart(2, '0');
+                        stopwatchDisplay.textContent = `${min}:${sec}:${ms}`;
+                    }, 10);
+                } else {
+                    stopwatchStartBtn.textContent = 'Start';
+                    clearInterval(stopwatchInterval);
+                }
+            };
+            document.getElementById('stopwatch-reset').onclick = () => {
+                clearInterval(stopwatchInterval);
+                stopwatchStartBtn.textContent = 'Start';
+                stopwatchTime = 0;
+                stopwatchDisplay.textContent = '00:00:00';
+            };
+        }
+        
+
+        // --- Initial Load ---
+        populateTools();
+    });
+    </script>
+
+</body>
+</html>
