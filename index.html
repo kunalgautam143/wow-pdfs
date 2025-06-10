@@ -75,8 +75,15 @@
         .footer-links a { color: var(--text-secondary); text-decoration: none; margin: 0 1rem; transition: color 0.3s ease; }
         .footer-links a:hover { color: var(--accent-primary); }
         .footer-copyright { color: var(--text-secondary); font-size: 0.9rem; }
+        
         .policy-container { padding-top: 4rem; }
-        .policy-container section { margin-bottom: 4rem; max-width: 800px; margin-left: auto; margin-right: auto; }
+        .policy-container section {
+            padding-top: 50px; /* Offset for sticky header */
+            margin-bottom: 4rem; 
+            max-width: 800px; 
+            margin-left: auto; 
+            margin-right: auto;
+        }
         .policy-container p, .policy-container li { color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.8; }
         .policy-container h3 { color: var(--accent-primary); margin-top: 2rem; margin-bottom: 1rem; }
         .policy-container ul { list-style-position: inside; padding-left: 1rem; }
@@ -97,7 +104,7 @@
     <header class="header">
         <div class="logo">WOW<span class="logo-accent">PDFs</span></div>
         <nav class="nav-links">
-            <a href="#tools">Home</a>
+            <a href="#home">Home</a>
             <a href="#about">About</a>
             <a href="#contact">Contact</a>
         </nav>
@@ -109,51 +116,52 @@
             <h1 class="section-title">The Ultimate PDF Tool Hub</h1>
             <div class="tool-grid"></div>
         </section>
+        
+        <!-- NEW POLICY SECTIONS ARE NOW INSIDE THE MAIN CONTAINER -->
+        <div class="policy-container">
+            <section id="about">
+                <h2 class="section-title">About WOW PDFs</h2>
+                <p>WOW PDFs was born from a simple idea: PDF tools should be powerful, fast, and private. In a world where data privacy is more important than ever, we wanted to create a suite of utilities that work entirely within your browser. This means your sensitive documents are never uploaded to a server. Everything you do on WOW PDFs stays on your computer.</p>
+                <p>Our mission is to provide a premium, user-friendly experience without compromising on security. Using modern web technologies like WebAssembly, we bring server-grade performance directly to your frontend, giving you the best of both worlds: power and privacy.</p>
+            </section>
+            <section id="contact">
+                <h2 class="section-title">Contact Us</h2>
+                <p>Have questions, feedback, or suggestions? We'd love to hear from you. Please reach out to us via email:</p>
+                <p style="text-align: center; font-size: 1.2rem; margin-top: 1rem;"><a href="mailto:support@yourdomain.com" class="contact-email">support@yourdomain.com</a></p>
+                <p>(Please replace 'support@yourdomain.com' with your actual email address).</p>
+            </section>
+            <section id="privacy">
+                <h2 class="section-title">Privacy Policy</h2>
+                <p><strong>Last Updated: [Date]</strong></p>
+                <p>At WOW PDFs, your privacy is our highest priority. This policy outlines our principles regarding the collection, use, and disclosure of personal information.</p>
+                <h3>Core Privacy Principle: Zero Uploads</h3>
+                <p>WOW PDFs is a 100% client-side application. This means that all PDF processing, including merging, splitting, compressing, and converting, happens directly in your web browser on your own computer. Your files are <strong>NEVER</strong> uploaded, sent to, or stored on our servers or any third-party server. We have no access to your documents at any time.</p>
+                <h3>Information We Do Not Collect</h3>
+                <p>We do not collect, store, or track any personal information or the content of the files you work with. This includes: Your name, email address, or other personal identifiers; The contents or metadata of your PDF or image files; Any data generated during the use of our tools.</p>
+                <h3>Information We May Collect (Analytics)</h3>
+                <p>To improve our website and understand which tools are most popular, we may use privacy-respecting analytics services (e.g., Google Analytics). This data is aggregated and anonymized and may include: The type of web browser and operating system you use; The pages you visit on our site and the tools you use; Your country of origin (but not your specific IP address).</p>
+                <h3>Cookies</h3>
+                <p>We may use cookies for essential site functionality or for the analytics services mentioned above. You can disable cookies in your browser settings, but this may affect the functionality of the site.</p>
+                <h3>Changes to This Policy</h3>
+                <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page. You are advised to review this Privacy Policy periodically for any changes.</p>
+            </section>
+            <section id="terms">
+                <h2 class="section-title">Terms & Conditions</h2>
+                <p><strong>Last Updated: [Date]</strong></p>
+                <p>By accessing and using WOW PDFs (the "Website"), you agree to be bound by these Terms and Conditions ("Terms"). If you disagree with any part of the terms, then you may not access the Website.</p>
+                <h3>Use of Tools</h3>
+                <p>The tools provided on this Website are for your personal and commercial use. They are provided on an "as is" basis. While we strive for accuracy and reliability, we do not guarantee that the tools will be error-free or that the output will be suitable for any specific purpose. All processing is done on your local machine, and we are not responsible for the content or the results of the processing.</p>
+                <h3>Disclaimer of Warranties</h3>
+                <p>The Website is provided without any warranties, express or implied. WOW PDFs does not warrant that the website will be available at all times, be secure, or be free of errors. You assume full responsibility and risk for your use of the Website and its tools.</p>
+                <h3>Limitation of Liability</h3>
+                <p>In no event shall WOW PDFs, nor its owners or operators, be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of data, loss of profits, or other intangible losses, resulting from your access to or use of or inability to access or use the Website.</p>
+                <h3>Governing Law</h3>
+                <p>These Terms shall be governed and construed in accordance with the laws of [Your Country/State], without regard to its conflict of law provisions.</p>
+                <h3>Changes to Terms</h3>
+                <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. We will provide notice of any changes by posting the new Terms on this page.</p>
+            </section>
+        </div>
     </main>
-
-    <div class="main-container policy-container">
-        <section id="about">
-            <h2 class="section-title">About WOW PDFs</h2>
-            <p>WOW PDFs was born from a simple idea: PDF tools should be powerful, fast, and private. In a world where data privacy is more important than ever, we wanted to create a suite of utilities that work entirely within your browser. This means your sensitive documents are never uploaded to a server. Everything you do on WOW PDFs stays on your computer.</p>
-            <p>Our mission is to provide a premium, user-friendly experience without compromising on security. Using modern web technologies like WebAssembly, we bring server-grade performance directly to your frontend, giving you the best of both worlds: power and privacy.</p>
-        </section>
-        <section id="contact">
-            <h2 class="section-title">Contact Us</h2>
-            <p>Have questions, feedback, or suggestions? We'd love to hear from you. Please reach out to us via email:</p>
-            <p style="text-align: center; font-size: 1.2rem; margin-top: 1rem;"><a href="mailto:support@yourdomain.com" class="contact-email">support@yourdomain.com</a></p>
-            <p>(Please replace 'support@yourdomain.com' with your actual email address).</p>
-        </section>
-        <section id="privacy">
-            <h2 class="section-title">Privacy Policy</h2>
-            <p><strong>Last Updated: [Date]</strong></p>
-            <p>At WOW PDFs, your privacy is our highest priority. This policy outlines our principles regarding the collection, use, and disclosure of personal information.</p>
-            <h3>Core Privacy Principle: Zero Uploads</h3>
-            <p>WOW PDFs is a 100% client-side application. This means that all PDF processing, including merging, splitting, compressing, and converting, happens directly in your web browser on your own computer. Your files are <strong>NEVER</strong> uploaded, sent to, or stored on our servers or any third-party server. We have no access to your documents at any time.</p>
-            <h3>Information We Do Not Collect</h3>
-            <p>We do not collect, store, or track any personal information or the content of the files you work with. This includes: Your name, email address, or other personal identifiers; The contents or metadata of your PDF or image files; Any data generated during the use of our tools.</p>
-            <h3>Information We May Collect (Analytics)</h3>
-            <p>To improve our website and understand which tools are most popular, we may use privacy-respecting analytics services (e.g., Google Analytics). This data is aggregated and anonymized and may include: The type of web browser and operating system you use; The pages you visit on our site and the tools you use; Your country of origin (but not your specific IP address).</p>
-            <h3>Cookies</h3>
-            <p>We may use cookies for essential site functionality or for the analytics services mentioned above. You can disable cookies in your browser settings, but this may affect the functionality of the site.</p>
-            <h3>Changes to This Policy</h3>
-            <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page. You are advised to review this Privacy Policy periodically for any changes.</p>
-        </section>
-        <section id="terms">
-            <h2 class="section-title">Terms & Conditions</h2>
-            <p><strong>Last Updated: [Date]</strong></p>
-            <p>By accessing and using WOW PDFs (the "Website"), you agree to be bound by these Terms and Conditions ("Terms"). If you disagree with any part of the terms, then you may not access the Website.</p>
-            <h3>Use of Tools</h3>
-            <p>The tools provided on this Website are for your personal and commercial use. They are provided on an "as is" basis. While we strive for accuracy and reliability, we do not guarantee that the tools will be error-free or that the output will be suitable for any specific purpose. All processing is done on your local machine, and we are not responsible for the content or the results of the processing.</p>
-            <h3>Disclaimer of Warranties</h3>
-            <p>The Website is provided without any warranties, express or implied. WOW PDFs does not warrant that the website will be available at all times, be secure, or be free of errors. You assume full responsibility and risk for your use of the Website and its tools.</p>
-            <h3>Limitation of Liability</h3>
-            <p>In no event shall WOW PDFs, nor its owners or operators, be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of data, loss of profits, or other intangible losses, resulting from your access to or use of or inability to access or use the Website.</p>
-            <h3>Governing Law</h3>
-            <p>These Terms shall be governed and construed in accordance with the laws of [Your Country/State], without regard to its conflict of law provisions.</p>
-            <h3>Changes to Terms</h3>
-            <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. We will provide notice of any changes by posting the new Terms on this page.</p>
-        </section>
-    </div>
 
     <footer class="footer">
         <div class="footer-links">
@@ -233,7 +241,7 @@
         modalClose.addEventListener('click', closeModal);
         window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
         navToggle.addEventListener('click', () => {
-            document.querySelector('.nav-links').classList.toggle('active');
+            navLinks.classList.toggle('active');
         });
 
         function downloadFile(bytes, fileName, mimeType) {
